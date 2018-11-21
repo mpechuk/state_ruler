@@ -14,7 +14,7 @@ const the_brain = (state = create_world(), action) => {
         saw: state.saw,
         farmers: state.farmers + 1,
         army: state.army - 1,
-        messages: state.mesages};
+        messages: []};
       } else {
         return state;
       }
@@ -28,7 +28,7 @@ const the_brain = (state = create_world(), action) => {
         saw: state.saw,
         farmers: state.farmers - 1,
         army: state.army + 1,
-        messages: state.mesages};
+        messages: []};
       } else {
         return state;
       }
