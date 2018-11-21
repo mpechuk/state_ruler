@@ -5,6 +5,34 @@ const create_world = () => {
 
 const the_brain = (state = create_world(), action) => {
   switch(action.type) {
+    case 'STORAGE_TO_FIELD':
+      if (state.wheat > 0) {
+              return {
+        year: state.year,
+        gold:state.gold,
+        wheat: state.wheat - 1,
+        saw: state.saw + 1,
+        farmers: state.farmers,
+        army: state.army,
+        messages: []};
+      } else {
+        return state;
+      }
+
+      case 'FIELD_TO_STORAGE':
+        if (state.saw > 0) {
+                return {
+          year: state.year,
+          gold:state.gold,
+          wheat: state.wheat + 1,
+          saw: state.saw - 1,
+          farmers: state.farmers,
+          army: state.army,
+          messages: []};
+        } else {
+          return state;
+        }
+
     case 'LESS_ARMY':
       if (state.army > 0) {
               return {
@@ -113,7 +141,7 @@ const { createStore } = Redux;
 
 var store = createStore(the_brain);
 
-const Year = ({ value, onNextYear, onLessArmy, onMoreArmy }) => (
+const Year = ({ value, onNextYear, onLessArmy, onMoreArmy, onStorageToField, onFieldToStorage }) => (
    <div>
    <button onClick={onNextYear}>Next year</button>
    <h1>Year {value.year}</h1>
@@ -140,6 +168,8 @@ const render = () => {
     onNextYear={() =>store.dispatch({type:'NEXT_YEAR'})}
     onLessArmy={() =>store.dispatch({type:'LESS_ARMY'})}
     onMoreArmy={() =>store.dispatch({type:'MORE_ARMY'})}
+    onStorageToField={() =>store.dispatch({type:'STORAGE_TO_FIELD'})}
+    onFieldToStorage={() =>store.dispatch({type:'FIELD_TO_STORAGE'})}
     />,
     document.getElementById('root')
   );
