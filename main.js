@@ -146,7 +146,11 @@ const Year = ({ value, onNextYear, onLessArmy, onMoreArmy, onStorageToField, onF
    <button onClick={onNextYear}>Next year</button>
    <h1>Year {value.year}</h1>
    <h2>Resources</h2>
-   <h3>Gold: {value.gold} Wheat in storage: {value.wheat}, Will sow: {value.saw}</h3>
+   <h3>Gold: {value.gold} </h3>
+  <h3>Wheat in storage: {value.wheat}</h3>
+     <button onClick={onFieldToStorage}>^</button>
+     <button onClick={onStorageToField}>V</button>
+    <h3>Field: {value.saw}</h3>
    <h2>People</h2>
    <h3>Farmers: {value.farmers} </h3>
     <button onClick={onLessArmy}>^</button>
