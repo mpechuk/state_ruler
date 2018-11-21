@@ -145,4 +145,9 @@ const render = () => {
   );
 }
 
-store.subscribe(render);
+const start = () => {
+  store.subscribe(render);
+  render();
+}
+
+start();
