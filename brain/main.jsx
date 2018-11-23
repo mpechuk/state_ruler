@@ -1,3 +1,4 @@
+/* @flow */
 
 const create_world = () => {
     return {year: 0, gold:100, wheat: 100, saw: 1, farmers: 100, army: 0, taxes: 1, messages: ['You became the king!']};
