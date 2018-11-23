@@ -147,6 +147,7 @@ const Year = ({ value, onNextYear, onLessArmy, onMoreArmy, onStorageToField, onF
    <h1>Year {value.year}</h1>
    <h2>Resources</h2>
    <h3>Gold: {value.gold} </h3>
+   <button onClick={onFieldToStorage}>^</button>
   <h3>Wheat in storage: {value.wheat}</h3>
      <button onClick={onFieldToStorage}>^</button>
      <button onClick={onStorageToField}>V</button>
