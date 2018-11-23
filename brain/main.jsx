@@ -7,7 +7,7 @@ const create_world = () => {
     saw: 1,
     farmers: 100,
     army: 0,
-    taxes: 1,
+    taxes: 0,
     messages: ['You became the king!']
   };
 }
@@ -51,6 +51,21 @@ const the_brain = (state = create_world(), action) => {
         return {
           year: state.year,
           taxes: state.taxes + 1,
+          gold: state.gold,
+          wheat: state.wheat,
+          saw: state.saw,
+          farmers: state.farmers,
+          army: state.army,
+          messages: []
+        };
+      } else {
+        return state;
+      }
+    case 'LESS_TAXES':
+      if (state.taxes > 0) {
+        return {
+          year: state.year,
+          taxes: state.taxes - 1,
           gold: state.gold,
           wheat: state.wheat,
           saw: state.saw,
@@ -185,7 +200,8 @@ const Year = ({
   onMoreArmy,
   onStorageToField,
   onFieldToStorage,
-  onFarmerToTaxer
+  onFarmerToTaxer,
+  onTaxerToFarmer
 }) => (<div>
   <button onClick={onNextYear} id="nextYear">Next year</button>
   <h1>Year {value.year}</h1>
@@ -193,8 +209,9 @@ const Year = ({
   <h3>Gold: {value.gold}
   </h3>
   <h3>Taxes per farmer: {value.taxes}
-    gold</h3>
-  <button onClick={onFarmerToTaxer}>Add Taxes</button>
+  gold</h3>
+  <button onClick={onFarmerToTaxer}>Add Taxes</button> <br/>
+  <button onClick={onTaxerToFarmer}>Remove Taxes</button>
   <h3>Wheat in storage: {value.wheat}</h3>
   <button onClick={onFieldToStorage}>^</button>
   <button onClick={onStorageToField}>v</button>
@@ -216,7 +233,7 @@ const Year = ({
 </div>)
 
 const render = () => {
-  ReactDOM.render(<Year value={store.getState()} onNextYear={() => store.dispatch({type: 'NEXT_YEAR'})} onLessArmy={() => store.dispatch({type: 'LESS_ARMY'})} onMoreArmy={() => store.dispatch({type: 'MORE_ARMY'})} onStorageToField={() => store.dispatch({type: 'STORAGE_TO_FIELD'})} onFieldToStorage={() => store.dispatch({type: 'FIELD_TO_STORAGE'})} onFarmerToTaxer={() => store.dispatch({type: 'CHANGE_TAXES'})}/>, document.getElementById('root'));
+  ReactDOM.render(<Year value={store.getState()} onNextYear={() => store.dispatch({type: 'NEXT_YEAR'})} onLessArmy={() => store.dispatch({type: 'LESS_ARMY'})} onMoreArmy={() => store.dispatch({type: 'MORE_ARMY'})} onStorageToField={() => store.dispatch({type: 'STORAGE_TO_FIELD'})} onFieldToStorage={() => store.dispatch({type: 'FIELD_TO_STORAGE'})} onTaxerToFarmer={() => store.dispatch({type: 'LESS_TAXES'})} onFarmerToTaxer={() => store.dispatch({type: 'CHANGE_TAXES'})}/>, document.getElementById('root'));
 }
 
 const start = () => {
