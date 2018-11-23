@@ -1,6 +1,6 @@
 
 const create_world = () => {
-    return {year: 0, gold:100, wheat: 100, saw: 1, farmers: 100, army: 0, messages: ['You became the king!']};
+    return {year: 0, gold:100, wheat: 100, saw: 1, farmers: 100, army: 0, taxes: 1, messages: ['You became the king!']};
 }
 
 const the_brain = (state = create_world(), action) => {
@@ -14,15 +14,19 @@ const the_brain = (state = create_world(), action) => {
         saw: state.saw + 1,
         farmers: state.farmers,
         army: state.army,
+        taxes: state.taxes,
         messages: []};
+
       } else {
         return state;
       }
 
       case 'FIELD_TO_STORAGE':
         if (state.saw > 0) {
+
                 return {
           year: state.year,
+          taxes: state.taxes,
           gold:state.gold,
           wheat: state.wheat + 1,
           saw: state.saw - 1,
@@ -33,10 +37,26 @@ const the_brain = (state = create_world(), action) => {
           return state;
         }
 
+        case 'CHANGE_TAXES':
+          if (state.saw > 0) {
+
+                  return {
+            year: state.year,
+            taxes: state.taxes + 1,
+            gold:state.gold,
+            wheat: state.wheat,
+            saw: state.saw,
+            farmers: state.farmers,
+            army: state.army,
+            messages: []};
+          } else {
+            return state;
+          }
     case 'LESS_ARMY':
       if (state.army > 0) {
               return {
         year: state.year,
+        taxes: state.taxes,
         gold:state.gold,
         wheat: state.wheat,
         saw: state.saw,
@@ -51,6 +71,7 @@ const the_brain = (state = create_world(), action) => {
       if (state.farmers > 0) {
               return {
         year: state.year,
+        taxes: state.taxes,
         gold:state.gold,
         wheat: state.wheat,
         saw: state.saw,
@@ -67,6 +88,7 @@ const the_brain = (state = create_world(), action) => {
       if (new_farmers == 0) {
         ly_mesages.push('You have no people to rule any more. This is the end...');
         return {
+          taxes: state.taxes,
           year: state.year,
           gold:state.gold,
           wheat: state.wheat,
@@ -115,7 +137,7 @@ const the_brain = (state = create_world(), action) => {
         new_army = new_gold;
       }
       new_gold = new_gold - new_army;
-
+      new_gold = new_farmers * state.taxes + new_gold;
       var new_wheat = saved + growed;
 
 
@@ -132,6 +154,7 @@ const the_brain = (state = create_world(), action) => {
         saw: state.saw,
         farmers: new_farmers,
         army:  new_army,
+        taxes: state.taxes,
         messages: ly_mesages};
   }
   return state;
@@ -141,22 +164,23 @@ const { createStore } = Redux;
 
 var store = createStore(the_brain);
 
-const Year = ({ value, onNextYear, onLessArmy, onMoreArmy, onStorageToField, onFieldToStorage }) => (
+const Year = ({ value, onNextYear, onLessArmy, onMoreArmy, onStorageToField, onFieldToStorage, onFarmerToTaxer }) => (
    <div>
-   <button onClick={onNextYear}>Next year</button>
+   <button onClick={onNextYear} id="nextYear" >Next year</button>
    <h1>Year {value.year}</h1>
    <h2>Resources</h2>
    <h3>Gold: {value.gold} </h3>
-   <button onClick={onFieldToStorage}>^</button>
+   <h3>Taxes per farmer: {value.taxes} gold</h3>
+   <button onClick={onFarmerToTaxer}>Add Taxes</button>
   <h3>Wheat in storage: {value.wheat}</h3>
      <button onClick={onFieldToStorage}>^</button>
-     <button onClick={onStorageToField}>V</button>
+     <button onClick={onStorageToField}>v</button>
     <h3>Field: {value.saw}</h3>
    <h2>People</h2>
    <h3>Farmers: {value.farmers} </h3>
     <button onClick={onLessArmy}>^</button>
-    <button onClick={onMoreArmy}>V</button>
-   <h3> Army: {value.army}</h3>
+    <button onClick={onMoreArmy}>v</button>
+   <h3> Army: {value.army} people</h3>
    <h4>What happened last year:</h4>
    <ul>{value.messages.map((message, index) =>
       <li key={index}>
@@ -175,6 +199,7 @@ const render = () => {
     onMoreArmy={() =>store.dispatch({type:'MORE_ARMY'})}
     onStorageToField={() =>store.dispatch({type:'STORAGE_TO_FIELD'})}
     onFieldToStorage={() =>store.dispatch({type:'FIELD_TO_STORAGE'})}
+    onFarmerToTaxer={() =>store.dispatch({type:'CHANGE_TAXES'})}
     />,
     document.getElementById('root')
   );
