@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing Babel...
+      - npm install --save-dev @babel/core @babel/cli @babel/preset-env
+      - npm install --save @babel/polyfill
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Compiling the brain js code
+      - ./node_modules/.bin/babel brain --out-dir lib
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - lib/main.js
+    - index.html
