@@ -46,21 +46,36 @@ const the_brain = (state = create_world(), action) => {
         return state;
       }
 
-    case 'CHANGE_TAXES':
-      if (state.saw > 0) {
-        return {
-          year: state.year,
-          taxes: state.taxes + 1,
-          gold: state.gold,
-          wheat: state.wheat,
-          saw: state.saw,
-          farmers: state.farmers,
-          army: state.army,
-          messages: []
-        };
-      } else {
-        return state;
-      }
+      case 'CHANGE_TAXES':
+        if (state.saw > 0) {
+          return {
+            year: state.year,
+            taxes: state.taxes + 1,
+            gold: state.gold,
+            wheat: state.wheat,
+            saw: state.saw,
+            farmers: state.farmers,
+            army: state.army,
+            messages: []
+          };
+        } else {
+          return state;
+        }
+        case 'MINUS_TAXES':
+          if (state.taxes > 0) {
+            return {
+              year: state.year,
+              taxes: state.taxes - 1,
+              gold: state.gold,
+              wheat: state.wheat,
+              saw: state.saw,
+              farmers: state.farmers,
+              army: state.army,
+              messages: []
+            };
+          } else {
+            return state;
+          }
 
     case 'LESS_ARMY':
       if (state.army > 0) {
@@ -110,7 +125,7 @@ const the_brain = (state = create_world(), action) => {
           messages: ly_mesages
         };
       }
-
+      var new_wheat = saved + growed;
       var productivity = (3 + Math.floor(Math.random() * 5));
       if (productivity > 6) {
         ly_mesages.push('It was a good year for farmers.');
@@ -145,20 +160,29 @@ const the_brain = (state = create_world(), action) => {
         ly_mesages.push(`War ruined wheat fields, ${wasted} wheat just wasted on the fields`);
         growed = growed - wasted;
       }
+      if (state.taxes > (Math.floor(Math.random() * 3 + 4))){
+        new_gold = 0;
+        ly_mesages.push('You have made your taxes to high. Only your loyal farmers have remained.');
+        new_farmers = (Math.floor(Math.random() * new_farmers));
+      }
+      new_gold = new_farmers * state.taxes + new_gold;
 
       if (new_gold < new_army) {
         ly_mesages.push('You have not enough money to pay your army. Part of army ran away.');
         new_army = new_gold;
       }
       new_gold = new_gold - new_army;
-      new_gold = new_farmers * state.taxes + new_gold;
-      var new_wheat = saved + growed;
+      if (new_wheat < new_army) {
+        ly_mesages.push('You have nothing to feed your army. Part of the army died from hunger.');
+        new_army = new_wheat;
+      }
+      new_wheat = new_wheat - new_army;
 
       if (new_wheat < new_farmers) {
         ly_mesages.push('You have nothing to feed your farmers. Part of farmers died from hunger.');
         new_farmers = new_wheat;
       }
-      new_wheat = new_wheat - new_farmers;
+      new_wheat = new_wheat - new_farmer;
 
       return {
         year: state.year + 1,
@@ -185,7 +209,8 @@ const Year = ({
   onMoreArmy,
   onStorageToField,
   onFieldToStorage,
-  onFarmerToTaxer
+  onFarmerToTaxer,
+  onTaxerToFarmer,
 }) => (<div>
   <button className="btn btn-primary" onClick={onNextYear} id="nextYear">Next year</button>
   <h1>Year {value.year}</h1>
@@ -193,12 +218,12 @@ const Year = ({
   <h3>Gold: {value.gold}
   </h3>
   <h3>Taxes per farmer: {value.taxes} gold</h3>
-  <button className="btn btn-primary" onClick={onFarmerToTaxer}>Add Taxes</button>
+  <button className="btn btn-success" onClick={onFarmerToTaxer}>&uarr;</button>
+  <button className="btn btn-danger" onClick={onTaxerToFarmer}>&darr;</button>
   <h3>Wheat in storage: {value.wheat}</h3>
   <button className="btn btn-success" onClick={onFieldToStorage}>&uarr;</button>
   <button className="btn btn-danger" onClick={onStorageToField}>&darr;</button>
   <h3>Field: {value.saw}</h3>
-  <h2>People</h2>
   <h3>Farmers: {value.farmers}
   </h3>
   <button className="btn btn-success" onClick={onLessArmy}>&uarr;</button>
@@ -207,14 +232,14 @@ const Year = ({
     Army: {value.army} people</h3>
   <h4>What happened last year:</h4>
   <ul>{
-      value.messages.map((message, index) => <li key={index}>
-        {message}
-      </li>)
-    }</ul>
+    value.messages.map((message, index) => <li key={index}>
+      {message}
+    </li>)
+  }</ul>
 </div>)
 
 const render = () => {
-  ReactDOM.render(<Year value={store.getState()} onNextYear={() => store.dispatch({type: 'NEXT_YEAR'})} onLessArmy={() => store.dispatch({type: 'LESS_ARMY'})} onMoreArmy={() => store.dispatch({type: 'MORE_ARMY'})} onStorageToField={() => store.dispatch({type: 'STORAGE_TO_FIELD'})} onFieldToStorage={() => store.dispatch({type: 'FIELD_TO_STORAGE'})} onFarmerToTaxer={() => store.dispatch({type: 'CHANGE_TAXES'})}/>, document.getElementById('root'));
+  ReactDOM.render(<Year value={store.getState()} onNextYear={() => store.dispatch({type: 'NEXT_YEAR'})} onLessArmy={() => store.dispatch({type: 'LESS_ARMY'})} onMoreArmy={() => store.dispatch({type: 'MORE_ARMY'})} onStorageToField={() => store.dispatch({type: 'STORAGE_TO_FIELD'})} onFieldToStorage={() => store.dispatch({type: 'FIELD_TO_STORAGE'})} onFarmerToTaxer={() => store.dispatch({type: 'CHANGE_TAXES'})} onTaxerToFarmer={() => store.dispatch({type: 'MINUS_TAXES'})}/>, document.getElementById('root'));
 }
 
 const start = () => {
