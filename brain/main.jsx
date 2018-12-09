@@ -125,7 +125,6 @@ const the_brain = (state = create_world(), action) => {
           messages: ly_mesages
         };
       }
-      var new_wheat = saved + growed;
       var productivity = (3 + Math.floor(Math.random() * 5));
       if (productivity > 6) {
         ly_mesages.push('It was a good year for farmers.');
@@ -166,7 +165,7 @@ const the_brain = (state = create_world(), action) => {
         new_farmers = (Math.floor(Math.random() * new_farmers));
       }
       new_gold = new_farmers * state.taxes + new_gold;
-
+      var new_wheat = saved + growed;
       if (new_gold < new_army) {
         ly_mesages.push('You have not enough money to pay your army. Part of army ran away.');
         new_army = new_gold;
@@ -182,7 +181,7 @@ const the_brain = (state = create_world(), action) => {
         ly_mesages.push('You have nothing to feed your farmers. Part of farmers died from hunger.');
         new_farmers = new_wheat;
       }
-      new_wheat = new_wheat - new_farmer;
+      new_wheat = new_wheat - new_farmers;
 
       return {
         year: state.year + 1,
