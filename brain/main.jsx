@@ -117,8 +117,8 @@ const the_brain = (state = create_world(), action) => {
       } else if (productivity < 5) {
         ly_mesages.push('It was a bad year for farmers.');
       }
-      var growed = state.saw * productivity;
-      ly_mesages.push(`Your farms growed ${growed} wheat`);
+      var grew = state.saw * productivity;
+      ly_mesages.push(`Your farms grew ${grew} wheat`);
       var saved = state.wheat;
 
       var new_army = state.army;
@@ -141,9 +141,9 @@ const the_brain = (state = create_world(), action) => {
         } else {
           ly_mesages.push('Your army has defeated barbarians');
         }
-        var wasted = Math.floor(Math.random() * growed / 2);
+        var wasted = Math.floor(Math.random() * grew / 2);
         ly_mesages.push(`War ruined wheat fields, ${wasted} wheat just wasted on the fields`);
-        growed = growed - wasted;
+        grew = grew - wasted;
       }
 
       if (new_gold < new_army) {
@@ -152,7 +152,7 @@ const the_brain = (state = create_world(), action) => {
       }
       new_gold = new_gold - new_army;
       new_gold = new_farmers * state.taxes + new_gold;
-      var new_wheat = saved + growed;
+      var new_wheat = saved + grew;
 
       if (new_wheat < new_farmers) {
         ly_mesages.push('You have nothing to feed your farmers. Part of farmers died from hunger.');
@@ -187,29 +187,30 @@ const Year = ({
   onFieldToStorage,
   onFarmerToTaxer
 }) => (<div>
+  <button className="btn btn-primary" onClick={onNextYear} id="nextYear">Next year</button>
   <h1>Year {value.year}</h1>
   <h2>Resources</h2>
   <h3>Gold: {value.gold}
   </h3>
   <h3>Taxes per farmer: {value.taxes} gold</h3>
-  <button onClick={onFarmerToTaxer}>Add Taxes</button>
+  <button className="btn btn-primary" onClick={onFarmerToTaxer}>Add Taxes</button>
   <h3>Wheat in storage: {value.wheat}</h3>
-  <button onClick={onFieldToStorage}>^</button>
-  <button onClick={onStorageToField}>v</button>
+  <button className="btn btn-success" onClick={onFieldToStorage}>&uarr;</button>
+  <button className="btn btn-danger" onClick={onStorageToField}>&darr;</button>
   <h3>Field: {value.saw}</h3>
   <h2>People</h2>
   <h3>Farmers: {value.farmers}
   </h3>
-  <button onClick={onLessArmy}>^</button>
-  <button onClick={onMoreArmy}>v</button>
-  <h3> Army: {value.army} people</h3>
-  <button onClick={onNextYear} id="nextYear">Next year</button>
+  <button className="btn btn-success" onClick={onLessArmy}>&uarr;</button>
+  <button className="btn btn-danger" onClick={onMoreArmy}>&darr;</button>
+  <h3>
+    Army: {value.army} people</h3>
   <h4>What happened last year:</h4>
   <ul>{
-      value.messages.map((message, index) => <li key={index}>
-        {message}
-      </li>)
-    }</ul>
+    value.messages.map((message, index) => <li key={index}>
+      {message}
+    </li>)
+  }</ul>
 </div>)
 
 const render = () => {
