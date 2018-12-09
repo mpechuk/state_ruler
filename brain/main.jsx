@@ -117,8 +117,8 @@ const the_brain = (state = create_world(), action) => {
       } else if (productivity < 5) {
         ly_mesages.push('It was a bad year for farmers.');
       }
-      var grew = state.saw * productivity;
-      ly_mesages.push(`Your farms grew ${grew} wheat`);
+      var growed = state.saw * productivity;
+      ly_mesages.push(`Your farms growed ${growed} wheat`);
       var saved = state.wheat;
 
       var new_army = state.army;
@@ -141,9 +141,9 @@ const the_brain = (state = create_world(), action) => {
         } else {
           ly_mesages.push('Your army has defeated barbarians');
         }
-        var wasted = Math.floor(Math.random() * grew / 2);
+        var wasted = Math.floor(Math.random() * growed / 2);
         ly_mesages.push(`War ruined wheat fields, ${wasted} wheat just wasted on the fields`);
-        grew = grew - wasted;
+        growed = growed - wasted;
       }
 
       if (new_gold < new_army) {
@@ -152,7 +152,7 @@ const the_brain = (state = create_world(), action) => {
       }
       new_gold = new_gold - new_army;
       new_gold = new_farmers * state.taxes + new_gold;
-      var new_wheat = saved + grew;
+      var new_wheat = saved + growed;
 
       if (new_wheat < new_farmers) {
         ly_mesages.push('You have nothing to feed your farmers. Part of farmers died from hunger.');
@@ -207,10 +207,10 @@ const Year = ({
     Army: {value.army} people</h3>
   <h4>What happened last year:</h4>
   <ul>{
-    value.messages.map((message, index) => <li key={index}>
-      {message}
-    </li>)
-  }</ul>
+      value.messages.map((message, index) => <li key={index}>
+        {message}
+      </li>)
+    }</ul>
 </div>)
 
 const render = () => {
