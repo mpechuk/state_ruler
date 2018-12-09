@@ -187,23 +187,24 @@ const Year = ({
   onFieldToStorage,
   onFarmerToTaxer
 }) => (<div>
+  <button className="btn btn-primary" onClick={onNextYear} id="nextYear">Next year</button>
   <h1>Year {value.year}</h1>
   <h2>Resources</h2>
   <h3>Gold: {value.gold}
   </h3>
   <h3>Taxes per farmer: {value.taxes} gold</h3>
-  <button onClick={onFarmerToTaxer}>Add Taxes</button>
+  <button className="btn btn-primary" onClick={onFarmerToTaxer}>Add Taxes</button>
   <h3>Wheat in storage: {value.wheat}</h3>
-  <button onClick={onFieldToStorage}>^</button>
-  <button onClick={onStorageToField}>v</button>
+  <button className="btn btn-success" onClick={onFieldToStorage}>&uarr;</button>
+  <button className="btn btn-danger" onClick={onStorageToField}>&darr;</button>
   <h3>Field: {value.saw}</h3>
   <h2>People</h2>
   <h3>Farmers: {value.farmers}
   </h3>
-  <button onClick={onLessArmy}>^</button>
-  <button onClick={onMoreArmy}>v</button>
-  <h3> Army: {value.army} people</h3>
-  <button onClick={onNextYear} id="nextYear">Next year</button>
+  <button className="btn btn-success" onClick={onLessArmy}>&uarr;</button>
+  <button className="btn btn-danger" onClick={onMoreArmy}>&darr;</button>
+  <h3>
+    Army: {value.army} people</h3>
   <h4>What happened last year:</h4>
   <ul>{
       value.messages.map((message, index) => <li key={index}>
