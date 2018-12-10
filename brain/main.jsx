@@ -134,15 +134,16 @@ const the_brain = (state = create_world(), action) => {
       var growed = state.saw * productivity;
       ly_mesages.push(`Your farms growed ${growed} wheat`);
       var saved = state.wheat;
-
       var new_army = state.army;
       var new_gold = state.gold;
+      var new_farmers = state.farmers;
+      new_farmers = new_farmers * (Math.floor(Math.random() * 3 + 1));
       if (Math.floor(Math.random() * 10) > 7) {
         var barbarianArmy = Math.floor(Math.random() * 50);
         ly_mesages.push(`Barbarians attacked you with army of ${barbarianArmy} warriors!`);
         if (barbarianArmy > new_army) {
           if (new_army == 0) {
-            ly_mesages.push('You have to army, barbarians killed all farmers');
+            ly_mesages.push('You have to get an army, barbarians killed all farmers');
             new_farmers = 0;
           } else {
             ly_mesages.push('Barbarians defeated your army and killed all soldiers');
@@ -154,6 +155,7 @@ const the_brain = (state = create_world(), action) => {
           saved = 0;
         } else {
           ly_mesages.push('Your army has defeated barbarians');
+          new_army = new_army - (Math.floor(Math.random() * barbarianArmy))
         }
         var wasted = Math.floor(Math.random() * growed / 2);
         ly_mesages.push(`War ruined wheat fields, ${wasted} wheat just wasted on the fields`);
