@@ -215,28 +215,52 @@ const Year = ({
 }) => (<div>
   <button className="btn btn-primary" onClick={onNextYear} id="nextYear">Next year</button>
   <h1>Year {value.year}</h1>
-  <h2>Resources</h2>
-  <h3>Gold: {value.gold}
-  </h3>
-  <h3>Taxes per farmer: {value.taxes} gold</h3>
-  <button className="btn btn-success" onClick={onFarmerToTaxer}>&uarr;</button>
-  <button className="btn btn-danger" onClick={onTaxerToFarmer}>&darr;</button>
-  <h3>Wheat in storage: {value.wheat}</h3>
-  <button className="btn btn-success" onClick={onFieldToStorage}>&uarr;</button>
-  <button className="btn btn-danger" onClick={onStorageToField}>&darr;</button>
-  <h3>Field: {value.saw}</h3>
-  <h3>Farmers: {value.farmers}
-  </h3>
-  <button className="btn btn-success" onClick={onLessArmy}>&uarr;</button>
-  <button className="btn btn-danger" onClick={onMoreArmy}>&darr;</button>
-  <h3>
-    Army: {value.army} people</h3>
   <h4>What happened last year:</h4>
   <ul>{
     value.messages.map((message, index) => <li key={index}>
       {message}
     </li>)
   }</ul>
+  <h3>Gold: {value.gold} </h3>
+  <h3>Taxes per farmer: {value.taxes} gold</h3>
+  <button className="btn btn-success" onClick={onFarmerToTaxer}>&uarr;</button>
+  <button className="btn btn-danger" onClick={onTaxerToFarmer}>&darr;</button>
+
+  <div className="row">
+    <div className="col-sm-9">
+      <h2>Wheat:</h2>
+      <div className="row">
+        <div className="col-8 col-sm-2">
+          <h4>Storage: <br></br> {value.wheat} wheat</h4>
+        </div>
+        <div className="col-8 col-sm-2">
+          <div class="col-9"><button className="btn btn-success btn-block" onClick={onFieldToStorage}>&larr;</button></div>
+          <div class="col-9"><button className="btn btn-danger btn-block" onClick={onStorageToField}>&rarr;</button></div>
+        </div>
+        <div className="col-4 col-sm-8">
+          <h4>Field: {value.saw} <br></br> wheat</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div className="row">
+    <div className="col-sm-9">
+      <h2>People:</h2>
+      <div className="row">
+        <div className="col-8 col-sm-2">
+          <h4>Farmers: <br></br> {value.farmers} people</h4>
+        </div>
+        <div className="col-8 col-sm-2">
+          <div class="col-9"><button className="btn btn-success btn-block" onClick={onLessArmy}>&larr;</button></div>
+          <div class="col-9"><button className="btn btn-danger btn-block" onClick={onMoreArmy}>&rarr;</button></div>
+        </div>
+        <div className="col-4 col-sm-8">
+          <h4>Army: <br></br>{value.army} people</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>)
 
 const render = () => {
