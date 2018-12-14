@@ -16,95 +16,55 @@ const the_brain = (state = create_world(), action) => {
   switch (action.type) {
     case 'STORAGE_TO_FIELD':
       if (state.wheat > 0) {
-        return {
-          year: state.year,
-          gold: state.gold,
-          wheat: state.wheat - 1,
-          saw: state.saw + 1,
-          farmers: state.farmers,
-          army: state.army,
-          taxes: state.taxes,
-          messages: []
-        };
+        return Object.assign(
+          {},
+          state,
+          {
+            wheat: state.wheat - 1,
+            saw: state.saw + 1
+        });
       } else {
         return state;
       }
 
     case 'FIELD_TO_STORAGE':
       if (state.saw > 0) {
-        return {
-          year: state.year,
-          taxes: state.taxes,
-          gold: state.gold,
+        return Object.assign(
+          {},
+          state,
+          {
           wheat: state.wheat + 1,
-          saw: state.saw - 1,
-          farmers: state.farmers,
-          army: state.army,
-          messages: []
-        };
+          saw: state.saw - 1
+        });
       } else {
         return state;
       }
 
       case 'CHANGE_TAXES':
         if (state.saw > 0) {
-          return {
-            year: state.year,
-            taxes: state.taxes + 1,
-            gold: state.gold,
-            wheat: state.wheat,
-            saw: state.saw,
-            farmers: state.farmers,
-            army: state.army,
-            messages: []
-          };
+          return Object.assign({}, state, {taxes: state.taxes + 1});
         } else {
           return state;
         }
         case 'MINUS_TAXES':
           if (state.taxes > 0) {
-            return {
-              year: state.year,
-              taxes: state.taxes - 1,
-              gold: state.gold,
-              wheat: state.wheat,
-              saw: state.saw,
-              farmers: state.farmers,
-              army: state.army,
-              messages: []
-            };
-          } else {
+            return Object.assign({}, state, {taxes: state.taxes - 1});
+        } else {
             return state;
           }
 
     case 'LESS_ARMY':
       if (state.army > 0) {
-        return {
-          year: state.year,
-          taxes: state.taxes,
-          gold: state.gold,
-          wheat: state.wheat,
-          saw: state.saw,
-          farmers: state.farmers + 1,
-          army: state.army - 1,
-          messages: []
-        };
+        return Object.assign({}, state, {farmers: state.farmers + 1,
+        army: state.army - 1});
       } else {
         return state;
       }
 
     case 'MORE_ARMY':
       if (state.farmers > 0) {
-        return {
-          year: state.year,
-          taxes: state.taxes,
-          gold: state.gold,
-          wheat: state.wheat,
-          saw: state.saw,
-          farmers: state.farmers - 1,
-          army: state.army + 1,
-          messages: []
-        };
+        return Object.assign({}, state, {farmers: state.farmers - 1,
+        army: state.army + 1});
       } else {
         return state;
       }
